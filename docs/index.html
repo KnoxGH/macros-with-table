@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TableMacro — Tap your desk. Your Mac responds.</title>
+<link rel="icon" href="favicon.png">
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #fbfbfa;
+    --fg: #1b1d1f;
+    --muted: #5b6167;
+    --accent: #2f6fed;
+    --border: rgba(0, 0, 0, 0.10);
+    --card: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #15171a;
+      --fg: #eef0f2;
+      --muted: #9aa2ab;
+      --accent: #6ea1ff;
+      --border: rgba(255, 255, 255, 0.12);
+      --card: #1c1f23;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 16px/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+  }
+  main { max-width: 840px; margin: 0 auto; padding: 64px 20px 96px; }
+  header { text-align: center; margin-bottom: 56px; }
+  .eyebrow { color: var(--muted); font-size: 14px; letter-spacing: 0.02em; margin-bottom: 8px; }
+  h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 0 0 12px; letter-spacing: -0.02em; }
+  .tagline { font-size: 1.15rem; color: var(--muted); margin: 0 auto 28px; max-width: 520px; }
+  .links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .button {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .button.primary { background: var(--accent); color: white; }
+  .button.secondary { border: 1px solid var(--border); color: var(--fg); }
+
+  figure.diagram {
+    margin: 0 0 56px;
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--card);
+  }
+  figure.diagram pre {
+    margin: 0;
+    font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: var(--muted);
+    text-align: center;
+    overflow-x: auto;
+  }
+
+  h2 { font-size: 1.4rem; margin: 0 0 18px; letter-spacing: -0.01em; }
+  section { margin-bottom: 48px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    background: var(--card);
+  }
+  .card h3 { margin: 0 0 6px; font-size: 1rem; }
+  .card p { margin: 0; color: var(--muted); font-size: 14px; }
+
+  ol, ul { padding-left: 22px; color: var(--fg); }
+  li { margin-bottom: 6px; }
+
+  .note {
+    border-left: 3px solid var(--accent);
+    padding: 4px 0 4px 16px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+
+<header>
+  <div class="eyebrow">Native macOS · Research prototype</div>
+  <h1>TableMacro</h1>
+  <p class="tagline">Tap your desk. Your Mac responds. TableMacro listens through the built-in microphone, classifies the tap locally, and runs the action assigned to that zone.</p>
+  <div class="links">
+    <a class="button primary" href="https://github.com/KnoxGH/macros-with-table">View on GitHub</a>
+    <a class="button secondary" href="https://github.com/KnoxGH/macros-with-table#readme">Read the docs</a>
+  </div>
+</header>
+
+<figure class="diagram">
+<pre>                  Display side
+Left Rear      ┌─────────────┐      Right Rear
+               │   MacBook   │
+Left Front     └─────────────┘      Right Front
+                  Trackpad side</pre>
+</figure>
+
+<section>
+  <h2>Four zones, one desk</h2>
+  <p>TableMacro turns the desk immediately around a MacBook into four assignable tap zones — rear and front, on each side. Ten calibration taps per zone teach it your desk's acoustics; after that, a tap runs whatever action you assigned.</p>
+</section>
+
+<section>
+  <h2>What each tap can do</h2>
+  <div class="grid">
+    <div class="card"><h3>Visual only</h3><p>Highlights the zone with no side effect.</p></div>
+    <div class="card"><h3>Sound &amp; speech</h3><p>Play a system sound, copy text, or speak it aloud.</p></div>
+    <div class="card"><h3>Open something</h3><p>A website, a Shortcut, an app, or a file/folder.</p></div>
+    <div class="card"><h3>Automate</h3><p>Run a shell command, or capture a screenshot to the clipboard.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>How it works</h2>
+  <ol>
+    <li>Calibrate: ten natural taps in each of the four zones, with live retry guidance for weak, noisy, or clipped taps.</li>
+    <li>Save the profile and assign an action to each zone.</li>
+    <li>TableMacro listens continuously for a short, high-contrast acoustic impulse, rejects sustained sounds like speech, and classifies accepted taps against your calibrated profile.</li>
+    <li>Run a guided 60-tap accuracy test any time to measure real per-zone accuracy, latency, and a confusion matrix.</li>
+  </ol>
+  <p class="note">TableMacro is a research prototype: automated DSP tests pass, but real accuracy still has to be measured on each MacBook, desk, and room.</p>
+</section>
+
+<section>
+  <h2>Privacy by construction</h2>
+  <p>All processing happens on the Mac. Raw audio is discarded after feature extraction by default — profiles store classifier parameters, not recordings — and nothing is uploaded unless an assigned action explicitly opens an external destination.</p>
+</section>
+
+<footer>
+  TableMacro is available under the MIT License. See the <a href="https://github.com/KnoxGH/macros-with-table">repository</a> for source, build instructions, and the full requirement-by-requirement acceptance ledger.
+</footer>
+
+</main>
+</body>
+</html>
