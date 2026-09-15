@@ -102,16 +102,24 @@ jobs:
           DMG_PATH="$dmg_path" scripts/release.sh
           printf 'DMG_PATH=%s\n' "$dmg_path" >> "$GITHUB_ENV"
 
-      - name: Create GitHub Release
+      - name: Create or update the GitHub Release
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh release create "$GITHUB_REF_NAME" "$DMG_PATH" \
-            --verify-tag \
-            --generate-notes \
-            --title "TableMacro $GITHUB_REF_NAME"
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            # The release was already created (e.g. via the GitHub UI, which
+            # creates the tag and release together before this workflow's
+            # push-tag trigger even runs). Attach the built DMG to it instead
+            # of trying to create a second release for the same tag.
+            gh release upload "$GITHUB_REF_NAME" "$DMG_PATH" --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" "$DMG_PATH" \
+              --verify-tag \
+              --generate-notes \
+              --title "TableMacro $GITHUB_REF_NAME"
+          fi
 
       - name: Remove temporary credentials
         if: always()
