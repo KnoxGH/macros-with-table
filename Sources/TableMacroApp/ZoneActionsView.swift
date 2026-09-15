@@ -13,7 +13,7 @@ struct ZoneActionsView: View {
                 VStack(alignment: .leading, spacing: 18) {
                     VStack(alignment: .leading, spacing: 5) {
                         Text("Assign actions")
-                            .font(.title.weight(.semibold))
+                            .font(.tablemacroTitle(28))
                         Text("Each accepted tap runs its assigned action. Changes save automatically.")
                             .font(.callout)
                             .foregroundStyle(.secondary)
@@ -153,14 +153,19 @@ private struct ZoneActionRow: View {
                 .accessibilityLabel("Test action for \(zoneDescription)")
             }
         } label: {
-            VStack(alignment: .leading, spacing: 1) {
-                Text(configuration.zone.positionName)
-                    .font(.body.weight(.medium))
-                Text(configuration.zone.isLeft ? "Left side" : "Right side")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+            HStack(spacing: 6) {
+                Circle()
+                    .fill(TableMacroTheme.color(for: configuration.zone))
+                    .frame(width: 8, height: 8)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(configuration.zone.positionName)
+                        .font(.body.weight(.bold))
+                    Text(configuration.zone.isLeft ? "Left side" : "Right side")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
-            .frame(width: 86, alignment: .leading)
+            .frame(width: 96, alignment: .leading)
         }
         .padding(.vertical, 4)
         .onChange(of: action) { oldValue, newValue in

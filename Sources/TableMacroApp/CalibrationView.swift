@@ -21,7 +21,7 @@ struct CalibrationView: View {
         VStack(alignment: .leading, spacing: 18) {
             VStack(alignment: .leading, spacing: 6) {
                 Text("Set up your desk")
-                    .font(.title.weight(.semibold))
+                    .font(.tablemacroTitle(28))
                 Text("Ten clean taps in each of four broad zones. Spread them around each highlighted area so TableMacro learns the whole zone, not one point.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
@@ -107,7 +107,8 @@ struct CalibrationView: View {
                 HStack(alignment: .firstTextBaseline) {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(session.zonesComplete ? "All zones captured" : session.currentZone?.displayName ?? "Calibration")
-                            .font(.title.weight(.semibold))
+                            .font(.tablemacroTitle(26))
+                            .foregroundStyle(session.currentZone.map(TableMacroTheme.color(for:)) ?? TableMacroTheme.accent)
                         Text(session.zonesComplete ? "Save the profile, then assign actions." : instruction(for: session))
                             .font(.callout)
                             .foregroundStyle(.secondary)
@@ -225,7 +226,7 @@ struct CalibrationView: View {
         }
         .padding(18)
         .frame(maxWidth: 760)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .tablemacroCard(tint: session.currentZone.map(TableMacroTheme.color(for:)) ?? TableMacroTheme.accent)
     }
 
     private func completionControls(_ session: CalibrationSession) -> some View {
@@ -307,7 +308,7 @@ struct CalibrationView: View {
         }
         .padding(18)
         .frame(maxWidth: 760)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .tablemacroCard()
     }
 
     private func consistencyReview(_ validation: CrossValidationResult) -> some View {
