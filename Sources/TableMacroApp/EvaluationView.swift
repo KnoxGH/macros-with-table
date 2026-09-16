@@ -102,6 +102,9 @@ struct EvaluationView: View {
                         session.records.filter { $0.expectedZone == zone }.count
                     }
                 )
+                .id(DeskZone.allCases.map { zone in
+                    session.records.filter { $0.expectedZone == zone }.count
+                })
                 .frame(maxWidth: 760)
 
                 VStack(spacing: 14) {

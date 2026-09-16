@@ -130,6 +130,7 @@ struct CalibrationView: View {
                     isListening: model.audio.isListening,
                     counts: DeskZone.allCases.map { session.count(for: $0) }
                 )
+                .id(DeskZone.allCases.map { session.count(for: $0) })
                 .frame(maxWidth: 760)
 
                 if session.zonesComplete {
