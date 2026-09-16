@@ -164,10 +164,6 @@ private struct MacBookSilhouette: View {
                         .foregroundStyle(.secondary)
                 }
                 .offset(y: -height * 0.29)
-
-                Capsule()
-                    .fill(tint.opacity(0.55))
-                    .frame(width: width * 0.4, height: max(height * 0.05, 5))
             }
         }
         .accessibilityElement(children: .ignore)
