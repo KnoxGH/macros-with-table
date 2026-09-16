@@ -29,6 +29,12 @@ cleanup() {
 }
 trap cleanup EXIT
 
+if [[ "${1:-}" == "--from" ]]; then
+    custom_master="${2:?usage: make_icon.sh --from <path-to-1024x1024.png>}"
+    cp "$custom_master" "$master_path"
+    echo "Using custom master: $custom_master"
+else
+
 # Renders the master 1024x1024 icon with a small embedded Swift script rather
 # than checking in a binary master, so the icon's exact geometry stays
 # reviewable as source. It draws a four-quadrant tile (the desk zones) with a
@@ -164,6 +170,8 @@ do {
     exit(1)
 }
 SWIFT
+
+fi
 
 make_representation() {
     local size="$1"
