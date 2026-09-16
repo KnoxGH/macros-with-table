@@ -22,7 +22,7 @@ struct TableMacroApp: App {
         .commands {
             CommandMenu("TableMacro") {
                 if model.selectedProfile == nil && model.guidedSection == nil {
-                    Button("Set Up Desk") {
+                    Button("Set Up Table") {
                         model.openSetup()
                     }
                 } else {
@@ -32,7 +32,7 @@ struct TableMacroApp: App {
                     .keyboardShortcut("p", modifiers: [.command, .shift])
                 }
 
-                Button("Recalibrate") {
+                Button("Retrain") {
                     model.prepareRecalibration()
                 }
                 .keyboardShortcut("r", modifiers: [.command, .shift])

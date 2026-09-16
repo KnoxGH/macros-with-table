@@ -82,7 +82,7 @@ final class ReplayScorerTests: XCTestCase {
         XCTAssertEqual(result.recordedAccuracy, 1, accuracy: 1e-12)
         XCTAssertEqual(result.accuracyDelta, -0.5, accuracy: 1e-12)
         XCTAssertEqual(result.outcomes.missingVector, 1)
-        XCTAssertEqual(result.perZoneAccuracy.first { $0.zone == "LF" }?.total, 1)
+        XCTAssertEqual(result.perZoneAccuracy.first { $0.zone == "NL" }?.total, 1)
     }
 
     private func makeFixture() throws -> (profile: TableMacroProfile, evaluation: EvaluationReport) {

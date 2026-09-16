@@ -13,8 +13,8 @@ final class ZoneTopologyTests: XCTestCase {
             [.rightTop, .rightBottom]
         )
         XCTAssertEqual(DeskZone.allCases.map(\.verticalIndex), [0, 1, 0, 1])
-        XCTAssertEqual(DeskZone.allCases.map(\.shortName), ["LR", "LF", "RR", "RF"])
-        XCTAssertEqual(DeskZone.allCases.map(\.positionName), ["Rear", "Front", "Rear", "Front"])
+        XCTAssertEqual(DeskZone.allCases.map(\.shortName), ["FL", "NL", "FR", "NR"])
+        XCTAssertEqual(DeskZone.allCases.map(\.positionName), ["Far", "Near", "Far", "Near"])
     }
 
     func testDefaultProfileConfigurationHasOneActionPerZone() throws {

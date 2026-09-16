@@ -12,9 +12,9 @@ struct ZoneActionsView: View {
             if let profile = model.selectedProfile {
                 VStack(alignment: .leading, spacing: 18) {
                     VStack(alignment: .leading, spacing: 5) {
-                        Text("Assign actions")
+                        Text("Assign macros")
                             .font(.tablemacroTitle(28))
-                        Text("Each accepted tap runs its assigned action. Changes save automatically.")
+                        Text("Each accepted tap runs its assigned macro. Changes save automatically.")
                             .font(.callout)
                             .foregroundStyle(.secondary)
                     }
@@ -55,7 +55,7 @@ struct ZoneActionsView: View {
                         Section("Automation") {
                             Label("Use Run Shortcut for multi-step workflows such as opening Claude and starting a voice workflow.", systemImage: "command")
                             Label("Shell commands run through /bin/zsh with TableMacro's current macOS permissions.", systemImage: "terminal")
-                            Label("Screenshot actions copy the result and may request Screen Recording access.", systemImage: "camera.viewfinder")
+                            Label("Screenshot macros copy the result and may request Screen Recording access.", systemImage: "camera.viewfinder")
                         }
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -80,21 +80,21 @@ struct ZoneActionsView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 ContentUnavailableView {
-                    Label("No Desk Profile", systemImage: "macbook")
+                    Label("No Table Profile", systemImage: "macbook")
                 } description: {
-                    Text("Calibrate the four zones before assigning actions.")
+                    Text("Train the four spots before assigning macros.")
                 } actions: {
-                    Button("Open Calibration") { model.section = .calibrate }
+                    Button("Open Training") { model.section = .calibrate }
                         .tablemacroPrimaryButton()
                 }
             }
         }
         .background(TableMacroTheme.background)
-        .confirmationDialog("Delete this desk profile?", isPresented: $confirmDelete) {
+        .confirmationDialog("Delete this table profile?", isPresented: $confirmDelete) {
             Button("Delete Profile", role: .destructive) { model.deleteSelectedProfile() }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("The saved calibration and its four actions will be removed.")
+            Text("The saved training and its four macros will be removed.")
         }
     }
 

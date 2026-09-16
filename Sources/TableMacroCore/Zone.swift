@@ -1,7 +1,7 @@
 import Foundation
 
-/// The four fixed desk zones: rear and front, on each side of the MacBook.
-/// This topology replaced earlier six- and nine-zone experiments; profiles
+/// The four fixed table spots: far and near, on each side of the MacBook.
+/// This topology replaced earlier six- and nine-spot experiments; profiles
 /// from those layouts are intentionally unreadable by the current decoder.
 public enum DeskZone: Int, CaseIterable, Codable, Hashable, Sendable, Identifiable {
     case leftTop = 0
@@ -16,19 +16,19 @@ public enum DeskZone: Int, CaseIterable, Codable, Hashable, Sendable, Identifiab
     public var isLeft: Bool { rawValue < 2 }
 
     public var positionName: String {
-        verticalIndex == 0 ? "Rear" : "Front"
+        verticalIndex == 0 ? "Far" : "Near"
     }
 
     public var shortName: String {
-        ["LR", "LF", "RR", "RF"][rawValue]
+        ["FL", "NL", "FR", "NR"][rawValue]
     }
 
     public var displayName: String {
-        ["Left Rear", "Left Front", "Right Rear", "Right Front"][rawValue]
+        ["Far Left", "Near Left", "Far Right", "Near Right"][rawValue]
     }
 
     public var instruction: String {
-        let edge = verticalIndex == 0 ? "display" : "trackpad"
+        let edge = verticalIndex == 0 ? "screen" : "wrist"
         return "Tap beside the MacBook on the \(isLeft ? "left" : "right"), near the \(edge) edge"
     }
 }
@@ -61,7 +61,7 @@ public enum SensingStrategy: String, CaseIterable, Codable, Sendable, Identifiab
     }
 }
 
-/// Why a captured event did not become an accepted zone decision.
+/// Why a captured event did not become an accepted spot decision.
 public enum RejectionReason: String, Codable, Sendable, Equatable {
     case weakSignal
     case lowSignalToNoise
@@ -78,8 +78,8 @@ public enum RejectionReason: String, Codable, Sendable, Equatable {
         case .lowSignalToNoise: return "Background noise too high"
         case .clippedSignal: return "Signal clipped"
         case .outOfDistribution: return "Unlike calibrated taps"
-        case .ambiguousZone: return "Zone ambiguous"
-        case .resemblesNegativeExample: return "Recognized non-desk sound"
+        case .ambiguousZone: return "Spot ambiguous"
+        case .resemblesNegativeExample: return "Recognized non-table sound"
         case .schemaMismatch: return "Profile is incompatible"
         case .paused: return "Listening paused"
         }

@@ -20,9 +20,9 @@ enum LocalActionDispatchError: Error, LocalizedError {
         case .openFailed(let destination):
             return "macOS could not open \(destination)."
         case .applicationBookmarkInvalid:
-            return "The assigned application is no longer available. Choose it again in Actions."
+            return "The assigned application is no longer available. Choose it again in Macros."
         case .itemBookmarkInvalid:
-            return "The assigned file or folder is no longer available. Choose it again in Actions."
+            return "The assigned file or folder is no longer available. Choose it again in Macros."
         case .automationFailed(let name, let status):
             return "\(name) exited with status \(status). Check the action and TableMacro's macOS permissions."
         }

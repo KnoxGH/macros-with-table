@@ -14,8 +14,8 @@ public struct CalibrationDraft: Sendable, Equatable {
     public var strategy: SensingStrategy
 
     public init(
-        name: String = "My Desk",
-        surfaceDescription: String = "Rigid desk",
+        name: String = "My Table",
+        surfaceDescription: String = "Rigid table",
         laptopPositionNote: String = "Laptop centered; position unchanged",
         strategy: SensingStrategy = .passive
     ) {

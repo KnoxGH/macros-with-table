@@ -45,7 +45,7 @@ final class AppModel: ObservableObject {
     @Published var selectedProfileID: UUID?
     @Published private(set) var activeZone: DeskZone?
     @Published private(set) var lastDecision: ClassificationDecision?
-    @Published private(set) var statusMessage = "Ready to map your desk"
+    @Published private(set) var statusMessage = "Ready to map your table"
     @Published private(set) var calibrationSession: CalibrationSession?
     @Published private(set) var calibrationValidation: CrossValidationResult?
     @Published private(set) var evaluationSession: EvaluationSession?
@@ -184,15 +184,15 @@ final class AppModel: ObservableObject {
         do {
             try await audio.start(strategy: targetStrategy)
             if let zone = calibrationSession?.currentZone {
-                statusMessage = "Calibration ready • move to \(zone.displayName), then arm"
+                statusMessage = "Training ready • move to \(zone.displayName), then arm"
             } else if let zone = evaluationSession?.currentZone {
-                statusMessage = "Accuracy test ready • move to \(zone.displayName), then arm"
+                statusMessage = "Test run ready • move to \(zone.displayName), then arm"
             } else if let benchmark = benchmarkSession,
                       let strategy = benchmark.currentStrategy,
                       let zone = benchmark.currentZone {
                 statusMessage = "Sensing comparison ready • \(strategy.displayName) • \(zone.displayName)"
             } else {
-                statusMessage = selectedProfile == nil ? "Listening • calibration needed" : "Listening for desk taps"
+                statusMessage = selectedProfile == nil ? "Listening • training needed" : "Listening for table taps"
             }
         } catch is CancellationError {
             return
@@ -205,7 +205,7 @@ final class AppModel: ObservableObject {
     func activateOnLaunch() async {
         guard selectedProfile != nil else {
             section = .calibrate
-            statusMessage = "Setup required • calibrate the four desk zones"
+            statusMessage = "Setup required • train the four table spots"
             return
         }
 
@@ -214,7 +214,7 @@ final class AppModel: ObservableObject {
             await activate()
         case .notDetermined:
             statusMessage = selectedProfile == nil
-                ? "Microphone access will be requested when calibration begins"
+                ? "Microphone access will be requested when training begins"
                 : "Press Resume to enable microphone access"
         case .unavailable:
             statusMessage = "Microphone access is off"
@@ -239,7 +239,7 @@ final class AppModel: ObservableObject {
     func openSetup() {
         guard guidedSection == nil else { return }
         section = .calibrate
-        statusMessage = "Setup required • calibrate the four desk zones"
+        statusMessage = "Setup required • train the four table spots"
     }
 
     func selectProfile(_ id: UUID?) {
@@ -272,7 +272,7 @@ final class AppModel: ObservableObject {
         evaluationSession = nil
         benchmarkSession = nil
         section = .calibrate
-        statusMessage = "Calibration • \(DeskZone.leftTop.displayName)"
+        statusMessage = "Training • \(DeskZone.leftTop.displayName)"
         Task {
             do {
                 try await prepareGuidedAudio(to: draft.strategy)
@@ -300,7 +300,7 @@ final class AppModel: ObservableObject {
         calibrationValidation = nil
         guidedCaptureIssue = nil
         recalibratingProfileID = nil
-        statusMessage = "Calibration cancelled"
+        statusMessage = "Training cancelled"
         Task {
             do { try await reconfigureListeningAudio(to: targetStrategy) }
             catch { errorMessage = error.localizedDescription }
@@ -333,7 +333,7 @@ final class AppModel: ObservableObject {
             current.isArmed = true
             self.calibrationAcceptAfter = Date()
             self.calibrationSession = current
-            self.statusMessage = "Calibration armed • \(zone.displayName) • tap 1 of \(current.targetPerZone)"
+            self.statusMessage = "Training armed • \(zone.displayName) • tap 1 of \(current.targetPerZone)"
         }
     }
 
@@ -346,7 +346,7 @@ final class AppModel: ObservableObject {
         if let label {
             statusMessage = "Rejection training • make a \(label.lowercased()) sound"
         } else {
-            statusMessage = "Calibration zones complete"
+            statusMessage = "Training spots complete"
         }
     }
 
@@ -438,7 +438,7 @@ final class AppModel: ObservableObject {
                 zones: oldProfile?.zones ?? DeskZone.allCases.map { ZoneConfiguration(zone: $0) }
             )
             if let oldProfile { profile.createdAt = oldProfile.createdAt }
-            guard let profileStore else { throw TableMacroStorageError.unavailable("Desk profile") }
+            guard let profileStore else { throw TableMacroStorageError.unavailable("Table profile") }
             try profileStore.save(profile)
             if let index = profiles.firstIndex(where: { $0.id == profile.id }) {
                 profiles[index] = profile
@@ -452,7 +452,7 @@ final class AppModel: ObservableObject {
             guidedCaptureIssue = nil
             recalibratingProfileID = nil
             section = openActions ? .actions : .live
-            statusMessage = "Calibration saved • listening"
+            statusMessage = "Training saved • listening"
             Task {
                 do { try await reconfigureListeningAudio(to: profile.sensingStrategy) }
                 catch { errorMessage = error.localizedDescription }
@@ -464,7 +464,7 @@ final class AppModel: ObservableObject {
 
     func beginEvaluation() {
         guard selectedProfile != nil else {
-            errorMessage = "Calibrate a desk profile before evaluating it."
+            errorMessage = "Train a table profile before evaluating it."
             return
         }
         pausedByUser = false
@@ -481,7 +481,7 @@ final class AppModel: ObservableObject {
         lastDecision = nil
         evaluationSession = EvaluationSession()
         section = .evaluate
-        statusMessage = "Accuracy test ready • move to Left Top, then arm"
+        statusMessage = "Test run ready • move to Far Left, then arm"
         Task {
             do { try await prepareGuidedAudio(to: targetStrategy) }
             catch is CancellationError { }
@@ -495,7 +495,7 @@ final class AppModel: ObservableObject {
         session.isArmed = false
         session.isSettling = true
         evaluationSession = session
-        statusMessage = "Get ready • accuracy test starts in one second"
+        statusMessage = "Get ready • test run starts in one second"
         evaluationArmTask = Task { [weak self] in
             try? await Task.sleep(nanoseconds: 1_000_000_000)
             guard !Task.isCancelled,
@@ -510,7 +510,7 @@ final class AppModel: ObservableObject {
             self.evaluationAcceptAfter = Date()
             self.evaluationSession = current
             let count = current.records.filter { $0.expectedZone == zone }.count
-            self.statusMessage = "Accuracy test armed • \(zone.displayName) • \(count + 1)/\(current.targetPerZone)"
+            self.statusMessage = "Test run armed • \(zone.displayName) • \(count + 1)/\(current.targetPerZone)"
         }
     }
 
@@ -519,7 +519,7 @@ final class AppModel: ObservableObject {
         evaluationSession = nil
         activeZone = nil
         refreshLatestEvaluation()
-        statusMessage = "Accuracy test cancelled"
+        statusMessage = "Test run cancelled"
     }
 
     func beginApproachBenchmark() {
@@ -581,7 +581,7 @@ final class AppModel: ObservableObject {
 
     func armDiagnosticCapture() {
         diagnosticCaptureArmed = true
-        statusMessage = "Diagnostic armed • tap \(diagnosticLabel.displayName)"
+        statusMessage = "Capture armed • tap \(diagnosticLabel.displayName)"
     }
 
     func exportDiagnosticReport() {
@@ -593,7 +593,7 @@ final class AppModel: ObservableObject {
         )
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.json]
-        panel.nameFieldStringValue = "tablemacro-diagnostic-\(Self.fileTimestamp()).json"
+        panel.nameFieldStringValue = "tablemacro-signal-lab-\(Self.fileTimestamp()).json"
         guard panel.runModal() == .OK, let url = panel.url else { return }
         do { try report.jsonData().write(to: url, options: .atomic) }
         catch { errorMessage = error.localizedDescription }
@@ -629,7 +629,7 @@ final class AppModel: ObservableObject {
         var updatedProfile = profiles[profileIndex]
         updatedProfile.zones[zoneIndex].action = action
         do {
-            guard let profileStore else { throw TableMacroStorageError.unavailable("Desk profile") }
+            guard let profileStore else { throw TableMacroStorageError.unavailable("Table profile") }
             try profileStore.save(updatedProfile)
             profiles[profileIndex] = updatedProfile
             return true
@@ -647,7 +647,7 @@ final class AppModel: ObservableObject {
     func deleteSelectedProfile() {
         guard let profile = selectedProfile else { return }
         do {
-            guard let profileStore else { throw TableMacroStorageError.unavailable("Desk profile") }
+            guard let profileStore else { throw TableMacroStorageError.unavailable("Table profile") }
             try profileStore.delete(profile)
             profiles.removeAll { $0.id == profile.id }
             selectedProfileID = profiles.first?.id
@@ -655,7 +655,7 @@ final class AppModel: ObservableObject {
             if let nextProfile = selectedProfile {
                 calibrationDraft = draft(for: nextProfile)
             }
-            statusMessage = profiles.isEmpty ? "Calibration needed" : "Profile deleted"
+            statusMessage = profiles.isEmpty ? "Training needed" : "Profile deleted"
             Task {
                 do { try await reconfigureListeningAudio(to: targetStrategy) }
                 catch { errorMessage = error.localizedDescription }
@@ -716,8 +716,8 @@ final class AppModel: ObservableObject {
             evaluationSession = evaluation
             if let next = evaluation.currentZone {
                 statusMessage = completedExpectedZone
-                    ? "Zone complete • move to \(next.displayName), then arm"
-                    : "Accuracy test • \(next.displayName) • \(evaluation.records.filter { $0.expectedZone == next }.count + 1)/\(evaluation.targetPerZone)"
+                    ? "Spot complete • move to \(next.displayName), then arm"
+                    : "Test run • \(next.displayName) • \(evaluation.records.filter { $0.expectedZone == next }.count + 1)/\(evaluation.targetPerZone)"
             } else {
                 finishEvaluation(evaluation)
             }
@@ -734,13 +734,13 @@ final class AppModel: ObservableObject {
                 )
                 diagnosticCaptures.append(capture)
                 diagnosticCaptureArmed = false
-                statusMessage = "Diagnostic captured • \(observation.feature.quality.summary)"
+                statusMessage = "Capture logged • \(observation.feature.quality.summary)"
             }
             return
         }
 
         guard let profile = selectedProfile else {
-            statusMessage = "Tap detected • calibrate to identify its zone"
+            statusMessage = "Tap detected • train to identify its spot"
             return
         }
         var decision = profile.classifier.predict(observation.feature)
@@ -758,7 +758,7 @@ final class AppModel: ObservableObject {
                     errorMessage = error.localizedDescription
                 }
             } else {
-                statusMessage = "\(zone.displayName) detected • actions paused outside Desk"
+                statusMessage = "\(zone.displayName) detected • macros paused outside Board"
             }
         } else {
             statusMessage = "Rejected • \(decision.rejectionReason?.displayName ?? "low confidence")"
@@ -785,7 +785,7 @@ final class AppModel: ObservableObject {
                 if count == session.targetPerZone {
                     session.isArmed = false
                     session.isSettling = true
-                    statusMessage = "Zone saved • move to \(next.displayName) • listening starts automatically"
+                    statusMessage = "Spot saved • move to \(next.displayName) • listening starts automatically"
                     scheduleCalibrationArm(for: next, delayNanoseconds: 2_000_000_000)
                 } else {
                     statusMessage = "\(zone.displayName) • tap \(count + 1) of \(session.targetPerZone)"
@@ -795,11 +795,11 @@ final class AppModel: ObservableObject {
                 session.isSettling = false
                 do {
                     calibrationValidation = try ClassifierEvaluator.leaveOneOut(session.positiveSamples)
-                    statusMessage = "All four zones captured • save or add rejection examples"
+                    statusMessage = "All four spots captured • save or add rejection examples"
                 } catch {
                     calibrationValidation = nil
-                    statusMessage = "Calibration review unavailable"
-                    errorMessage = "TableMacro could not review calibration consistency. \(error.localizedDescription)"
+                    statusMessage = "Training review unavailable"
+                    errorMessage = "TableMacro could not review training consistency. \(error.localizedDescription)"
                 }
             }
         } else if let label = session.negativeLabel {
@@ -880,7 +880,7 @@ final class AppModel: ObservableObject {
             strategy: profile.sensingStrategy,
             startedAt: session.startedAt,
             records: session.records,
-            notes: "Guided held-out session; \(EvaluationAcceptance.tapsPerZone) taps per zone."
+            notes: "Guided held-out session; \(EvaluationAcceptance.tapsPerZone) taps per spot."
         )
         latestEvaluation = report
         latestEvaluationIsPersisted = false
@@ -895,17 +895,17 @@ final class AppModel: ObservableObject {
             evaluationHistory.sort { $0.completedAt > $1.completedAt }
             latestEvaluationIsPersisted = true
             statusMessage = report.meetsAccuracyAndLatencyTargets
-                ? "Accuracy test passed"
-                : "Accuracy test complete • review results"
+                ? "Test run passed"
+                : "Test run complete • review results"
         } catch {
-            statusMessage = "Accuracy test complete • report not saved"
-            errorMessage = "The accuracy test completed, but its JSON/CSV report was not saved. \(error.localizedDescription)"
+            statusMessage = "Test run complete • report not saved"
+            errorMessage = "The test run completed, but its JSON/CSV report was not saved. \(error.localizedDescription)"
         }
     }
 
     private var currentCaptureLabel: String {
         if let session = calibrationSession {
-            if let zone = session.currentZone { return "calibration-\(zone.shortName)" }
+            if let zone = session.currentZone { return "training-\(zone.shortName)" }
             if let label = session.negativeLabel { return "negative-\(label)" }
         }
         if let session = evaluationSession, let zone = session.currentZone { return "evaluation-\(zone.shortName)" }

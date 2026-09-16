@@ -87,15 +87,15 @@ struct RootView: View {
                 } label: {
                     Label(model.selectedProfile?.name ?? "Profile", systemImage: "macbook")
                 }
-                .help("Choose a desk profile")
+                .help("Choose a table profile")
                 .disabled(model.guidedSection != nil)
             }
 
             if model.selectedProfile == nil && model.guidedSection == nil {
                 Button(action: model.openSetup) {
-                    Label("Set Up Desk", systemImage: "scope")
+                    Label("Set Up Table", systemImage: "scope")
                 }
-                .help("Calibrate the four zones before listening")
+                .help("Train the four spots before listening")
             } else {
                 Button(action: model.togglePause) {
                     Label(
@@ -143,7 +143,7 @@ struct RootView: View {
     }
 
     private var microphoneDetail: String {
-        if needsInitialSetup { return "Calibrate four zones first" }
+        if needsInitialSetup { return "Train four spots first" }
         return model.audio.isListening ? "Processed on this Mac" : "No audio capture"
     }
 

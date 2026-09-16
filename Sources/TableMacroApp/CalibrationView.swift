@@ -20,16 +20,16 @@ struct CalibrationView: View {
     private var setup: some View {
         VStack(alignment: .leading, spacing: 18) {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Set up your desk")
+                Text("Set up your table")
                     .font(.tablemacroTitle(28))
-                Text("Ten clean taps in each of four broad zones. Spread them around each highlighted area so TableMacro learns the whole zone, not one point.")
+                Text("Ten clean taps in each of four broad spots. Spread them around each highlighted area so TableMacro learns the whole spot, not one point.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
 
             Form {
                 Section("Profile") {
-                    TextField("Name", text: $model.calibrationDraft.name, prompt: Text("My Desk"))
+                    TextField("Name", text: $model.calibrationDraft.name, prompt: Text("My Table"))
                     TextField("Surface", text: $model.calibrationDraft.surfaceDescription, prompt: Text("Wood, laminate, glass…"))
                     TextField("MacBook position", text: $model.calibrationDraft.laptopPositionNote, prompt: Text("Centered, near the back edge…"))
                 }
@@ -50,30 +50,30 @@ struct CalibrationView: View {
                     }
                 }
 
-                Section("Before calibration") {
+                Section("Before training") {
                     Label("Put the MacBook where it normally stays", systemImage: "macbook")
                     Label("Clear objects and cables that touch the MacBook", systemImage: "rectangle.dashed")
-                    Label("Use one finger and a similar natural force, but vary the position within each zone", systemImage: "hand.tap")
+                    Label("Use one finger and a similar natural force, but vary the position within each spot", systemImage: "hand.tap")
                 }
 
                 Section {
                     if let comparison = model.applicableApproachComparison {
                         Label(
-                            "The latest diagnostics comparison selected \(comparison.selectedStrategy.displayName).",
+                            "The latest Signal Lab comparison selected \(comparison.selectedStrategy.displayName).",
                             systemImage: "checkmark.circle"
                         )
                     } else {
                         Label(
                             model.selectedProfile == nil
-                                ? "Passive sensing is selected until you compare approaches in Diagnostics."
-                                : "This profile keeps its saved approach until you compare approaches on this desk.",
+                                ? "Passive sensing is selected until you compare approaches in Signal Lab."
+                                : "This profile keeps its saved approach until you compare approaches on this table.",
                             systemImage: "info.circle"
                         )
                     }
 
                     HStack {
                         if let profile = model.selectedProfile {
-                            Button("Recalibrate \(profile.name)") {
+                            Button("Retrain \(profile.name)") {
                                 model.beginCalibration(draft: model.calibrationDraft, recalibrating: profile)
                             }
                             .tablemacroPrimaryButton()
@@ -84,7 +84,7 @@ struct CalibrationView: View {
                             }
                             .tablemacroSecondaryButton()
                         } else {
-                            Button("Begin Calibration") {
+                            Button("Begin Training") {
                                 model.beginCalibration(draft: model.calibrationDraft)
                             }
                             .tablemacroPrimaryButton()
@@ -106,10 +106,10 @@ struct CalibrationView: View {
             VStack(spacing: 22) {
                 HStack(alignment: .firstTextBaseline) {
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(session.zonesComplete ? "All zones captured" : session.currentZone?.displayName ?? "Calibration")
+                        Text(session.zonesComplete ? "All spots captured" : session.currentZone?.displayName ?? "Training")
                             .font(.tablemacroTitle(26))
                             .foregroundStyle(session.currentZone.map(TableMacroTheme.color(for:)) ?? TableMacroTheme.accent)
-                        Text(session.zonesComplete ? "Save the profile, then assign actions." : instruction(for: session))
+                        Text(session.zonesComplete ? "Save the profile, then assign macros." : instruction(for: session))
                             .font(.callout)
                             .foregroundStyle(.secondary)
                     }
@@ -120,7 +120,7 @@ struct CalibrationView: View {
                 }
 
                 ProgressView(value: session.progress)
-                    .accessibilityLabel("Calibration progress")
+                    .accessibilityLabel("Training progress")
 
                 DeskMapView(
                     activeZone: nil,
@@ -159,7 +159,7 @@ struct CalibrationView: View {
                     Circle()
                         .fill(.red)
                         .frame(width: 7, height: 7)
-                    Text("Listening for this zone")
+                    Text("Listening for this spot")
                         .font(.headline)
                     if let zone = session.currentZone {
                         Text("Tap \(session.count(for: zone) + 1) of \(session.targetPerZone)")
@@ -169,7 +169,7 @@ struct CalibrationView: View {
                 }
                 .accessibilityElement(children: .combine)
             } else if let zone = session.currentZone {
-                Text("Move your hand to the \(zone.displayName.lowercased()) area. TableMacro ignores all sounds until you arm the zone.")
+                Text("Move your hand to the \(zone.displayName.lowercased()) area. TableMacro ignores all sounds until you arm the spot.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -179,9 +179,9 @@ struct CalibrationView: View {
                 .tablemacroPrimaryButton()
                 .controlSize(.large)
                 .disabled(!model.audio.isListening)
-                .help(model.audio.isListening ? "Start collecting this zone" : "Resume the microphone before arming")
+                .help(model.audio.isListening ? "Start collecting this spot" : "Resume the microphone before arming")
                 .accessibilityHint(model.audio.isListening
-                    ? "Starts listening for taps in this zone."
+                    ? "Starts listening for taps in this spot."
                     : "The microphone is paused. Resume it before arming.")
             }
 
@@ -211,7 +211,7 @@ struct CalibrationView: View {
                 .tablemacroSecondaryButton()
                 .disabled(session.positiveSamples.isEmpty)
 
-                Button("Redo Zone", systemImage: "arrow.counterclockwise") {
+                Button("Redo Spot", systemImage: "arrow.counterclockwise") {
                     model.retryCalibrationZone()
                 }
                 .tablemacroSecondaryButton()
@@ -248,7 +248,7 @@ struct CalibrationView: View {
                     .controlSize(.large)
 
                     Menu("Save Anyway") {
-                        Button("Save and Set Actions") {
+                        Button("Save and Set Macros") {
                             model.finishCalibration(openActions: true)
                         }
                         Button("Save for Later") {
@@ -257,7 +257,7 @@ struct CalibrationView: View {
                     }
                     .tablemacroSecondaryButton()
                 } else {
-                    Button("Save and Set Actions") {
+                    Button("Save and Set Macros") {
                         model.finishCalibration(openActions: true)
                     }
                     .tablemacroPrimaryButton()
@@ -317,18 +317,18 @@ struct CalibrationView: View {
 
         return VStack(alignment: .leading, spacing: 8) {
             Label(
-                "Calibration agreement: \(Int(validation.accuracy * 100))%",
+                "Training agreement: \(Int(validation.accuracy * 100))%",
                 systemImage: needsReview ? "exclamationmark.triangle" : "checkmark.circle"
             )
             .font(.headline)
             .foregroundStyle(needsReview ? Color.orange : Color.primary)
 
-                    Text("Each tap was classified while left out of training. This checks consistency; it is not the separate accuracy test.")
+                    Text("Each tap was classified while left out of training. This checks consistency; it is not the separate test run.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
             if needsReview, let weakest {
-                Text("Weakest zone: \(weakest.zone.displayName) · \(Int(weakest.accuracy * 100))%. Recapture it for a cleaner profile, or save anyway from the secondary menu.")
+                Text("Weakest spot: \(weakest.zone.displayName) · \(Int(weakest.accuracy * 100))%. Recapture it for a cleaner profile, or save anyway from the secondary menu.")
                     .font(.callout)
             }
         }
@@ -344,12 +344,12 @@ struct CalibrationView: View {
     private func instruction(for session: CalibrationSession) -> String {
         guard session.currentZone != nil else { return "" }
         if session.isSettling {
-            return "Move to the highlighted zone. Listening starts automatically."
+            return "Move to the highlighted spot. Listening starts automatically."
         }
         if session.isArmed {
             return "Spread natural taps across the highlighted area and pause between taps."
         }
-        return "Move to the highlighted zone, then arm it when ready."
+        return "Move to the highlighted spot, then arm it when ready."
     }
 
     private func settlingMessage(for session: CalibrationSession) -> String {

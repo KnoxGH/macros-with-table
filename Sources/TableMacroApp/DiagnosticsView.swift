@@ -14,9 +14,9 @@ struct DiagnosticsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             VStack(alignment: .leading, spacing: 5) {
-                Text("Diagnostics")
+                Text("Signal Lab")
                     .font(.tablemacroTitle(28))
-                Text("Inspect the microphone path, capture labeled examples, and compare sensing approaches on this desk.")
+                Text("Inspect the microphone path, capture labeled examples, and compare sensing approaches on this table.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
@@ -49,7 +49,7 @@ struct DiagnosticsView: View {
 
                 Section("Latest detected tap") {
                     if model.audio.diagnostics.latestFrequencyResponse.isEmpty {
-                        Text("Tap the desk to inspect its response.")
+                        Text("Tap the table to inspect its response.")
                             .foregroundStyle(.secondary)
                     } else {
                         spectrumChart(model.audio.diagnostics.latestFrequencyResponse)
@@ -144,7 +144,7 @@ struct DiagnosticsView: View {
 
     private var approachLab: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("This comparison collects three taps per zone for each approach, then compares cross-validation accuracy and processing latency. Active and hybrid modes emit a quiet chirp.")
+            Text("This comparison collects three taps per spot for each approach, then compares cross-validation accuracy and processing latency. Active and hybrid modes emit a quiet chirp.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
@@ -211,7 +211,7 @@ struct DiagnosticsView: View {
             if let comparison = model.approachComparison {
                 if comparison.profileID != model.selectedProfile?.id {
                     Label(
-                        "This saved comparison belongs to a different or unscoped desk setup. Run it again before using the result here.",
+                        "This saved comparison belongs to a different or unscoped table setup. Run it again before using the result here.",
                         systemImage: "info.circle"
                     )
                     .font(.caption)

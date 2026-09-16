@@ -43,17 +43,17 @@ struct LiveSurfaceView: View {
             Image(systemName: "scope")
                 .font(.system(size: 42, weight: .bold))
                 .foregroundStyle(TableMacroTheme.accent)
-            Text("Set up the desk around your MacBook")
+            Text("Set up the table around your MacBook")
                 .font(.tablemacroTitle(24))
-            Text("Taps cannot be assigned until TableMacro learns this desk. You will tap ten times across each of four broad zones: rear and front on both sides of the MacBook.")
+            Text("Taps cannot be assigned until TableMacro learns this table. You will tap ten times across each of four broad spots: far and near on both sides of the MacBook.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: 480)
-            Text("Microphone access is requested when calibration begins.")
+            Text("Microphone access is requested when training begins.")
                 .font(.caption)
                 .foregroundStyle(.tertiary)
-            Button("Set Up Four Zones") {
+            Button("Set Up Four Spots") {
                 model.openSetup()
             }
             .tablemacroPrimaryButton()
@@ -92,7 +92,7 @@ struct LiveSurfaceView: View {
 
             Spacer()
 
-            Button("Recalibrate", systemImage: "arrow.triangle.2.circlepath") {
+            Button("Retrain", systemImage: "arrow.triangle.2.circlepath") {
                 model.prepareRecalibration()
             }
             .tablemacroSecondaryButton()

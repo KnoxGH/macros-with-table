@@ -8,11 +8,11 @@ struct EvaluationView: View {
         Group {
             if model.selectedProfile == nil {
                 ContentUnavailableView {
-                    Label("No Desk Profile", systemImage: "checkmark.seal")
+                    Label("No Table Profile", systemImage: "checkmark.seal")
                 } description: {
-                    Text("Calibrate the four desk zones before evaluating them.")
+                    Text("Train the four table spots before evaluating them.")
                 } actions: {
-                    Button("Open Calibration") { model.section = .calibrate }
+                    Button("Open Training") { model.section = .calibrate }
                         .tablemacroPrimaryButton()
                 }
             } else if let session = model.evaluationSession {
@@ -34,9 +34,9 @@ struct EvaluationView: View {
                 .font(.system(size: 44, weight: .light))
                 .foregroundStyle(.secondary)
             VStack(spacing: 7) {
-                Text("Test your calibration")
+                Text("Test your training")
                     .font(.tablemacroTitle(28))
-                Text("Use new taps that were not part of calibration. TableMacro guides \(EvaluationAcceptance.tapsPerZone) taps in each zone and counts rejected taps as incorrect.")
+                Text("Use new taps that were not part of training. TableMacro guides \(EvaluationAcceptance.tapsPerZone) taps in each spot and counts rejected taps as incorrect.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -46,7 +46,7 @@ struct EvaluationView: View {
             Grid(alignment: .leading, horizontalSpacing: 28, verticalSpacing: 10) {
                 acceptanceRow(
                     "Taps",
-                    "\(DeskZone.allCases.count * EvaluationAcceptance.tapsPerZone) total · \(EvaluationAcceptance.tapsPerZone) per zone"
+                    "\(DeskZone.allCases.count * EvaluationAcceptance.tapsPerZone) total · \(EvaluationAcceptance.tapsPerZone) per spot"
                 )
                 acceptanceRow(
                     "Accuracy target",
@@ -56,11 +56,11 @@ struct EvaluationView: View {
                     "Response target",
                     "Median under \(Int(EvaluationAcceptance.maximumMedianResponseMilliseconds)) ms"
                 )
-                acceptanceRow("Output", "Per-zone accuracy and confusion matrix")
+                acceptanceRow("Output", "Per-spot accuracy and confusion matrix")
             }
             .font(.callout)
 
-            Button("Start Accuracy Test") { model.beginEvaluation() }
+            Button("Start Test Run") { model.beginEvaluation() }
                 .tablemacroPrimaryButton()
                 .controlSize(.large)
             Spacer()
@@ -76,7 +76,7 @@ struct EvaluationView: View {
                         Text(session.currentZone?.displayName ?? "Complete")
                             .font(.tablemacroTitle(26))
                             .foregroundStyle(session.currentZone.map(TableMacroTheme.color(for:)) ?? TableMacroTheme.accent)
-                        Text("Tap the highlighted zone naturally.")
+                        Text("Tap the highlighted spot naturally.")
                             .font(.callout)
                             .foregroundStyle(.secondary)
                     }
@@ -118,7 +118,7 @@ struct EvaluationView: View {
                             Circle()
                                 .fill(.red)
                                 .frame(width: 7, height: 7)
-                            Text("Accuracy test armed")
+                            Text("Test run armed")
                                 .font(.headline)
                             if let zone = session.currentZone {
                                 let count = session.records.filter { $0.expectedZone == zone }.count
@@ -129,7 +129,7 @@ struct EvaluationView: View {
                         }
                         .accessibilityElement(children: .combine)
                     } else if let zone = session.currentZone {
-                        Text("Move to \(zone.displayName.lowercased()). Sounds are ignored until you arm this zone.")
+                        Text("Move to \(zone.displayName.lowercased()). Sounds are ignored until you arm this spot.")
                             .font(.callout)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
@@ -137,9 +137,9 @@ struct EvaluationView: View {
                             .tablemacroPrimaryButton()
                             .controlSize(.large)
                             .disabled(!model.audio.isListening)
-                            .help(model.audio.isListening ? "Start testing this zone" : "Resume the microphone before arming")
+                            .help(model.audio.isListening ? "Start testing this spot" : "Resume the microphone before arming")
                             .accessibilityHint(model.audio.isListening
-                                ? "Starts listening for evaluation taps in this zone."
+                                ? "Starts listening for evaluation taps in this spot."
                                 : "The microphone is paused. Resume it before arming.")
                     }
 
@@ -170,7 +170,7 @@ struct EvaluationView: View {
             VStack(alignment: .leading, spacing: 24) {
                 HStack(alignment: .firstTextBaseline) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(report.meetsAccuracyAndLatencyTargets ? "Accuracy test passed" : "Accuracy test complete")
+                        Text(report.meetsAccuracyAndLatencyTargets ? "Test run passed" : "Test run complete")
                             .font(.tablemacroTitle(26))
                             .foregroundStyle(report.meetsAccuracyAndLatencyTargets ? TableMacroTheme.color(for: .rightTop) : TableMacroTheme.accent)
                         Text("\(report.profileName) · \(report.strategy.displayName)")
@@ -209,11 +209,11 @@ struct EvaluationView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Per-zone accuracy")
+                    Text("Per-spot accuracy")
                         .font(.headline)
                     Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 9) {
                         GridRow {
-                            Text("Zone").foregroundStyle(.secondary)
+                            Text("Spot").foregroundStyle(.secondary)
                             Text("Correct").foregroundStyle(.secondary)
                             Text("Accuracy").foregroundStyle(.secondary)
                         }
@@ -264,7 +264,7 @@ struct EvaluationView: View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Confusion matrix")
                 .font(.headline)
-            Text("Rows are expected zones. Columns are predicted zones; R is rejected.")
+            Text("Rows are expected spots. Columns are predicted spots; R is rejected.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
