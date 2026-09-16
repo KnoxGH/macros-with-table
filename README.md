@@ -158,7 +158,7 @@ AVAudioEngine input
 
 Each detected window uses one shared power spectrum for classification, active-response bands, and diagnostics rather than repeating the same FFT. Capture generations discard observations queued by an audio route or strategy that has already been stopped.
 
-The interface rationale is in [DESIGN.md](DESIGN.md). TableMacro uses a bold, colorful visual system: one signature accent plus a distinct vivid color per table spot, applied consistently across the table map, live results, training, evaluation, and macros screens, on top of native macOS structure (sidebar, forms, standard controls). The table map uses two continuous two-spot rails instead of four floating cards.
+The interface rationale and source research are in [DESIGN.md](DESIGN.md). The central rule is that system materials and Liquid Glass support navigation and controls; they are not decoration for content. The table map uses two continuous two-spot rails instead of four floating cards. The UI deliberately avoids neon gradients, bento metric cards, excessive rounded containers, filler metrics, and continuous ornamental motion.
 
 ## Privacy and storage
 

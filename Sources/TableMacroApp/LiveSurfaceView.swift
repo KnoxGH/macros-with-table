@@ -41,10 +41,10 @@ struct LiveSurfaceView: View {
     private var setupPrompt: some View {
         VStack(spacing: 10) {
             Image(systemName: "scope")
-                .font(.system(size: 42, weight: .bold))
-                .foregroundStyle(TableMacroTheme.accent)
+                .font(.system(size: 38, weight: .light))
+                .foregroundStyle(.secondary)
             Text("Set up the table around your MacBook")
-                .font(.tablemacroTitle(24))
+                .font(.title2.weight(.semibold))
             Text("Taps cannot be assigned until TableMacro learns this table. You will tap ten times across each of four broad spots: far and near on both sides of the MacBook.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
@@ -66,8 +66,7 @@ struct LiveSurfaceView: View {
         HStack(spacing: 18) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(lastResultTitle)
-                    .font(.headline.weight(.bold))
-                    .foregroundStyle(resultTint)
+                    .font(.headline)
                 Text(model.lastDecision?.rejectionReason?.displayName ?? model.selectedProfile?.name ?? "")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -76,14 +75,14 @@ struct LiveSurfaceView: View {
 
             Divider().frame(height: 34)
 
-            compactGauge("Confidence", value: model.lastDecision?.confidence ?? 0, tint: resultTint)
-            compactGauge("Signal", value: model.lastDecision?.signalStrength ?? model.audio.liveLevel, tint: resultTint)
+            compactGauge("Confidence", value: model.lastDecision?.confidence ?? 0)
+            compactGauge("Signal", value: model.lastDecision?.signalStrength ?? model.audio.liveLevel)
 
             if let latency = model.lastDecision?.processingLatencyMilliseconds, latency > 0 {
                 Divider().frame(height: 34)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(String(format: "%.1f ms", latency))
-                        .font(.callout.monospacedDigit().weight(.semibold))
+                        .font(.callout.monospacedDigit())
                     Text("Processing")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
@@ -99,11 +98,7 @@ struct LiveSurfaceView: View {
         }
         .padding(16)
         .frame(maxWidth: 760)
-        .tablemacroCard(tint: resultTint)
-    }
-
-    private var resultTint: Color {
-        model.lastDecision?.zone.map(TableMacroTheme.color(for:)) ?? TableMacroTheme.accent
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
     private var lastResultTitle: String {
@@ -111,7 +106,7 @@ struct LiveSurfaceView: View {
         return decision.zone?.displayName ?? "Tap rejected"
     }
 
-    private func compactGauge(_ label: String, value: Double, tint: Color) -> some View {
+    private func compactGauge(_ label: String, value: Double) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Text(label)
@@ -119,10 +114,9 @@ struct LiveSurfaceView: View {
                 Text("\(Int(value * 100))%")
                     .monospacedDigit()
             }
-            .font(.caption.weight(.medium))
+            .font(.caption)
             .foregroundStyle(.secondary)
             ProgressView(value: value)
-                .tint(tint)
                 .frame(width: 112)
         }
     }

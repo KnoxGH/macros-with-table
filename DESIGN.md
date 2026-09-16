@@ -1,23 +1,26 @@
 # TableMacro interface direction
 
-TableMacro should feel like a bold, colorful instrument, not a generic gray analytics dashboard. It still leans on native macOS structure — sidebar, forms, standard controls — but its color system is deliberately loud: a saturated signature accent plus one vivid, distinct color per desk zone, so a result reads at a glance instead of through a single monochrome highlight.
+TableMacro should feel like a quiet macOS instrument: spatial, precise, and calm. It should not look like a generic analytics dashboard or a science-fiction control panel.
 
 ## Reference lessons
 
 - Apple places Liquid Glass in the functional layer—navigation and controls—and recommends standard materials for content. Use system components first and custom glass sparingly. See [Materials](https://developer.apple.com/design/human-interface-guidelines/materials) and [Designing for macOS](https://developer.apple.com/design/human-interface-guidelines/designing-for-macos/).
-- A stable sidebar, a single obvious working area, progressive disclosure, and purposeful motion keep advanced sensing and rejection controls out of the primary path — bold color doesn't require abandoning that structure.
-- Color should carry real meaning: each desk zone's color appears everywhere that zone is referenced (the desk map, results, the confusion matrix, the actions list), so the palette does information work, not just decoration.
+- A calm interface avoids competing for attention it has not earned; structure should be felt rather than seen. TableMacro therefore uses fewer icons, separators, borders, and elevated containers.
+- A stable sidebar, a single obvious working area, progressive disclosure, and purposeful motion keep advanced sensing and rejection controls out of the primary path.
+- Task focus, contextual dimming, and attention to interaction details matter more than decoration.
 
-## Design rules
+## Anti-slop rules
 
-1. One signature accent (a saturated violet) plus the four-color zone palette defined in `TableMacroTheme`. No arbitrary additional colors — every color used has a meaning (a zone, or the shared accent).
-2. Panels use a soft tinted gradient card (`tablemacroCard`) instead of plain system materials, so state (which zone, pass/fail) is visible in the background color itself.
-3. No boxes inside boxes beyond that one card level. A container must communicate real grouping or interaction.
-4. No uppercase eyebrow copy, excessive tracking, or invented metrics. Every number must come from real capture or evaluation data.
-5. Titles use a heavy, rounded display face (`Font.tablemacroTitle`); body text stays system default for readability.
-6. Liquid Glass is for toolbar and important controls. Content uses `tablemacroCard`/`tablemacroPrimaryButton`/`tablemacroSecondaryButton` rather than ad-hoc styling.
-7. Prefer native `NavigationSplitView`, `List`, `Form`, `Table`, `LabeledContent`, `Gauge`, `ProgressView`, menus, sheets, and toolbars — the color system sits on top of standard structure, not a custom one.
-8. Motion explains a state change (a zone lighting up, a pulsing waveform while listening); nothing pulses merely to look alive.
+1. No purple–cyan gradients, neon glow, decorative blobs, or forced dark mode.
+2. No bento grid of interchangeable metric cards.
+3. No boxes inside boxes. A container must communicate real grouping or interaction.
+4. No uppercase eyebrow copy, excessive tracking, or oversized marketing headings inside the app.
+5. One semantic accent color. Status colors are reserved for success, warning, recording, and error.
+6. No decorative icon tiles. Symbols identify actions or objects only.
+7. No invented metrics or ornamental charts. Every number must come from real capture or evaluation data.
+8. Liquid Glass is for toolbar and important controls. Content uses standard system materials.
+9. Prefer native `NavigationSplitView`, `List`, `Form`, `Table`, `LabeledContent`, `Gauge`, `ProgressView`, menus, sheets, and toolbars.
+10. Motion explains a state change; nothing continuously pulses merely to look alive.
 
 ## Signal-processing lessons
 

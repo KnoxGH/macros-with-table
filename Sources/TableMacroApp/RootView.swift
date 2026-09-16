@@ -34,7 +34,6 @@ struct RootView: View {
                 }
         }
         .navigationSplitViewStyle(.balanced)
-        .tint(TableMacroTheme.accent)
         .alert("TableMacro", isPresented: Binding(
             get: { model.errorMessage != nil },
             set: { if !$0 { model.errorMessage = nil } }
@@ -47,7 +46,6 @@ struct RootView: View {
 
     private func navigationRow(_ section: AppSection) -> some View {
         Label(section.title, systemImage: section.symbol)
-            .font(.body.weight(.semibold))
             .tag(section)
             .disabled(!model.canNavigate(to: section))
     }
@@ -124,7 +122,7 @@ struct RootView: View {
             }
             ProgressView(value: model.audio.liveLevel)
                 .progressViewStyle(.linear)
-                .tint(model.audio.isListening ? TableMacroTheme.accent : .gray)
+                .tint(model.audio.isListening ? .blue : .gray)
         }
     }
 
@@ -150,7 +148,7 @@ struct RootView: View {
     private var statusBar: some View {
         HStack(spacing: 8) {
             Circle()
-                .fill(model.audio.isListening ? TableMacroTheme.accent : Color.secondary)
+                .fill(model.audio.isListening ? Color.green : Color.secondary)
                 .frame(width: 6, height: 6)
             Text(model.statusMessage)
                 .font(.caption)

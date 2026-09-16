@@ -21,7 +21,7 @@ struct CalibrationView: View {
         VStack(alignment: .leading, spacing: 18) {
             VStack(alignment: .leading, spacing: 6) {
                 Text("Set up your table")
-                    .font(.tablemacroTitle(28))
+                    .font(.title.weight(.semibold))
                 Text("Ten clean taps in each of four broad spots. Spread them around each highlighted area so TableMacro learns the whole spot, not one point.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
@@ -107,8 +107,7 @@ struct CalibrationView: View {
                 HStack(alignment: .firstTextBaseline) {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(session.zonesComplete ? "All spots captured" : session.currentZone?.displayName ?? "Training")
-                            .font(.tablemacroTitle(26))
-                            .foregroundStyle(session.currentZone.map(TableMacroTheme.color(for:)) ?? TableMacroTheme.accent)
+                            .font(.title.weight(.semibold))
                         Text(session.zonesComplete ? "Save the profile, then assign macros." : instruction(for: session))
                             .font(.callout)
                             .foregroundStyle(.secondary)
@@ -227,7 +226,7 @@ struct CalibrationView: View {
         }
         .padding(18)
         .frame(maxWidth: 760)
-        .tablemacroCard(tint: session.currentZone.map(TableMacroTheme.color(for:)) ?? TableMacroTheme.accent)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
     private func completionControls(_ session: CalibrationSession) -> some View {
@@ -309,7 +308,7 @@ struct CalibrationView: View {
         }
         .padding(18)
         .frame(maxWidth: 760)
-        .tablemacroCard()
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
     private func consistencyReview(_ validation: CrossValidationResult) -> some View {

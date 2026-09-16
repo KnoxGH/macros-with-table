@@ -35,7 +35,7 @@ struct EvaluationView: View {
                 .foregroundStyle(.secondary)
             VStack(spacing: 7) {
                 Text("Test your training")
-                    .font(.tablemacroTitle(28))
+                    .font(.title.weight(.semibold))
                 Text("Use new taps that were not part of training. TableMacro guides \(EvaluationAcceptance.tapsPerZone) taps in each spot and counts rejected taps as incorrect.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
@@ -74,8 +74,7 @@ struct EvaluationView: View {
                 HStack(alignment: .firstTextBaseline) {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(session.currentZone?.displayName ?? "Complete")
-                            .font(.tablemacroTitle(26))
-                            .foregroundStyle(session.currentZone.map(TableMacroTheme.color(for:)) ?? TableMacroTheme.accent)
+                            .font(.title.weight(.semibold))
                         Text("Tap the highlighted spot naturally.")
                             .font(.callout)
                             .foregroundStyle(.secondary)
@@ -160,7 +159,7 @@ struct EvaluationView: View {
                     .font(.callout)
                 }
                 .padding(16)
-                .tablemacroCard(tint: session.currentZone.map(TableMacroTheme.color(for:)) ?? TableMacroTheme.accent)
+                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
             }
             .frame(maxWidth: 820)
             .padding(32)
@@ -174,8 +173,7 @@ struct EvaluationView: View {
                 HStack(alignment: .firstTextBaseline) {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(report.meetsAccuracyAndLatencyTargets ? "Test run passed" : "Test run complete")
-                            .font(.tablemacroTitle(26))
-                            .foregroundStyle(report.meetsAccuracyAndLatencyTargets ? TableMacroTheme.color(for: .rightTop) : TableMacroTheme.accent)
+                            .font(.title.weight(.semibold))
                         Text("\(report.profileName) · \(report.strategy.displayName)")
                             .font(.callout)
                             .foregroundStyle(.secondary)
@@ -343,12 +341,12 @@ struct EvaluationView: View {
 
     private func matrixCell(_ value: Int, diagonal: Bool) -> some View {
         Text("\(value)")
-            .font(.caption.monospacedDigit().weight(.semibold))
+            .font(.caption.monospacedDigit())
             .frame(width: 34, height: 28)
             .background(
-                (diagonal ? TableMacroTheme.color(for: .rightTop) : TableMacroTheme.color(for: .leftTop))
-                    .opacity(value == 0 ? 0.04 : min(0.12 + Double(value) * 0.06, 0.55)),
-                in: RoundedRectangle(cornerRadius: 6)
+                (diagonal ? Color.green : Color.orange)
+                    .opacity(value == 0 ? 0.04 : min(0.10 + Double(value) * 0.055, 0.48)),
+                in: RoundedRectangle(cornerRadius: 5)
             )
     }
 }

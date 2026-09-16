@@ -15,7 +15,7 @@ struct DiagnosticsView: View {
         VStack(alignment: .leading, spacing: 18) {
             VStack(alignment: .leading, spacing: 5) {
                 Text("Signal Lab")
-                    .font(.tablemacroTitle(28))
+                    .font(.title.weight(.semibold))
                 Text("Inspect the microphone path, capture labeled examples, and compare sensing approaches on this table.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
@@ -252,7 +252,7 @@ struct DiagnosticsView: View {
                 ForEach(bands) { band in
                     let normalized = min(max((band.levelDB + 110) / 90, 0.015), 1)
                     RoundedRectangle(cornerRadius: 2, style: .continuous)
-                        .fill(TableMacroTheme.accent.opacity(0.7))
+                        .fill(Color.accentColor.opacity(0.55))
                         .frame(width: max(width - 3, 2), height: geometry.size.height * normalized)
                         .help(String(format: "%.0f Hz • %.1f dB", band.centerFrequency, band.levelDB))
                 }
